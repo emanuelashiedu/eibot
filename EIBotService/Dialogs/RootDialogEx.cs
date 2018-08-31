@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Threading.Tasks;
-using EIBot.CommandHandling;
+//using EIBot.CommandHandling;
 using EIBot.Strings;
 using Microsoft.Bot.Builder.Dialogs;
 using Microsoft.Bot.Connector;
@@ -11,7 +11,7 @@ namespace EIBot.Dialogs
     /// Simple dialog that will only ever provide simple instructions.
     /// </summary>
     [Serializable]
-    public class RootDialog : IDialog<object>
+    public class RootDialogEx : IDialog<object>
     {
         public Task StartAsync(IDialogContext dialogContext)
         {
