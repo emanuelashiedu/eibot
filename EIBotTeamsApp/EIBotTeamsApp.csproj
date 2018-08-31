@@ -100,6 +100,21 @@
       <HintPath>..\packages\Microsoft.IdentityModel.Tokens.5.1.4\lib\net451\Microsoft.IdentityModel.Tokens.dll</HintPath>
       <Private>True</Private>
     </Reference>
+    <Reference Include="Microsoft.Recognizers.Definitions, Version=1.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.Recognizers.Text.1.0.11\lib\net452\Microsoft.Recognizers.Definitions.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Recognizers.Text, Version=1.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.Recognizers.Text.1.0.11\lib\net452\Microsoft.Recognizers.Text.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Recognizers.Text.DateTime, Version=1.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.Recognizers.Text.DateTime.1.0.11\lib\net452\Microsoft.Recognizers.Text.DateTime.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Recognizers.Text.Number, Version=1.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.Recognizers.Text.Number.1.0.11\lib\net452\Microsoft.Recognizers.Text.Number.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Recognizers.Text.NumberWithUnit, Version=1.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.Recognizers.Text.NumberWithUnit.1.0.11\lib\net452\Microsoft.Recognizers.Text.NumberWithUnit.dll</HintPath>
+    </Reference>
     <Reference Include="Microsoft.Rest.ClientRuntime, Version=2.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <HintPath>..\packages\Microsoft.Rest.ClientRuntime.2.3.10\lib\net452\Microsoft.Rest.ClientRuntime.dll</HintPath>
       <Private>True</Private>
@@ -115,6 +130,9 @@
     <Reference Include="Polly, Version=5.3.1.0, Culture=neutral, PublicKeyToken=c8a3ffc3f8f825cc, processorArchitecture=MSIL">
       <HintPath>..\packages\Polly-Signed.5.3.1\lib\net45\Polly.dll</HintPath>
       <Private>True</Private>
+    </Reference>
+    <Reference Include="System.Collections.Immutable, Version=1.2.2.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.Collections.Immutable.1.4.0\lib\portable-net45+win8+wp8+wpa81\System.Collections.Immutable.dll</HintPath>
     </Reference>
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="System.IdentityModel.Tokens.Jwt, Version=5.1.4.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
@@ -137,6 +155,9 @@
     <Reference Include="System.Spatial, Version=5.6.4.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <HintPath>..\packages\System.Spatial.5.6.4\lib\net40\System.Spatial.dll</HintPath>
       <Private>True</Private>
+    </Reference>
+    <Reference Include="System.ValueTuple, Version=4.0.2.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.ValueTuple.4.4.0\lib\netstandard1.0\System.ValueTuple.dll</HintPath>
     </Reference>
     <Reference Include="System.Web.DynamicData" />
     <Reference Include="System.Web.Entity" />
@@ -178,6 +199,8 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="App_Start\WebApiConfig.cs" />
+    <Compile Include="src\dialogs\examples\moderate\DeadlinePrompt.cs" />
+    <Compile Include="src\dialogs\examples\moderate\InternetResearchDialog.cs" />
     <Compile Include="src\dialogs\examples\teams\FetchTeamsInfoDialog.cs" />
     <Compile Include="src\dialogs\examples\teams\UpdateCardMsgSetupDialog.cs" />
     <Compile Include="utility\InvokeHandler.cs" />
@@ -252,6 +275,7 @@
     <EmbeddedResource Include="Properties\Strings.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Strings.Designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup />

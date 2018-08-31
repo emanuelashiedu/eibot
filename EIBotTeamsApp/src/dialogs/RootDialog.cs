@@ -17,6 +17,23 @@ namespace Microsoft.Teams.TemplateBotCSharp.Dialogs
     [Serializable]
     public class RootDialog : DispatchDialog
     {
+        #region Internet research Pattern
+
+        [RegexPattern(DialogMatches.PerformInternetResearchMatch)]
+        [ScorableGroup(1)]
+        public void PerformInternetResearch(IDialogContext context, IActivity activity)
+        {
+            context.Call(new InternetResearchDialog(), EndInternetResearchDialog);
+        }
+
+        public async Task EndInternetResearchDialog(IDialogContext context, IAwaitable<bool> awaitable)
+        {
+            await context.PostAsync("Have a nice day!");
+            context.Done<object>(null);
+        }
+
+        #endregion
+
         #region Fetch Roster Api Payload Pattern
 
         [RegexPattern(DialogMatches.FetchRosterPayloadMatch)]

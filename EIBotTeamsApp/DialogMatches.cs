@@ -6,6 +6,8 @@
     /// </summary>
     public static class DialogMatches
     {
+        public const string PerformInternetResearchMatch = "research";
+        public const string PerformPowerpointImprovementsMatch = "ppt";
         public const string FetchRosterApiMatch = "names";
 
         public const string FetchRosterPayloadMatch = "roster";

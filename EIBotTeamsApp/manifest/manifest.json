@@ -53,6 +53,10 @@
                     ],
                     "commands": [
                         {
+                            "title": "research",
+                            "description": "Perform internet research with help of experts"
+                        },
+                        {
                             "title": "help",
                             "description": "To show the list of command for user interactions"
                         },
@@ -87,10 +91,6 @@
                         {
                             "title": "update text message",
                             "description": "Updates a text message once it is setup to be updated"
-                        },
-                        {
-                            "title": "setup card message",
-                            "description": "Sets up a card that can be updated"
                         }
                     ]
                 },
@@ -100,6 +100,10 @@
                     ],
                     "commands": [
                         {
+                            "title": "research",
+                            "description": "Perform internet research with help of experts"
+                        },
+                        {
                             "title": "help",
                             "description": "To show the list of command for user interactions"
                         },
@@ -134,10 +138,6 @@
                         {
                             "title": "update text message",
                             "description": "Updates a text message once it is setup to be updated"
-                        },
-                        {
-                            "title": "setup card message",
-                            "description": "Sets up a card that can be updated"
                         }
                     ]
                 }
