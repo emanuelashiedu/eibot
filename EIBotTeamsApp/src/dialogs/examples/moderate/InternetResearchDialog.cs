@@ -1,5 +1,10 @@
-﻿using Microsoft.Teams.TemplateBotCSharp.Properties;
+﻿using System.Configuration;
+using System.Diagnostics;
+using System.Linq;
+using Microsoft.Teams.TemplateBotCSharp.Properties;
 using System.Threading.Tasks;
+using Microsoft.Bot.Connector.Teams;
+using Microsoft.Bot.Connector.Teams.Models;
 
 namespace Microsoft.Teams.TemplateBotCSharp.Dialogs
 {
@@ -38,6 +43,13 @@ namespace Microsoft.Teams.TemplateBotCSharp.Dialogs
             {
                 throw new ArgumentNullException(nameof(context));
             }
+
+            //var connectorClient = new ConnectorClient(new Uri(context.Activity.ServiceUrl));
+
+            //var teamInfo = context.Activity.GetChannelData<TeamsChannelData>().Team;
+            //ConversationList channels = connectorClient.GetTeamsConnectorClient().Teams.FetchChannelList(teamInfo.Id);
+            //var channelInfo = channels.Conversations.FirstOrDefault(c => c.Name.Equals(ConfigurationManager.AppSettings["ResearchAgentChannelName"]));
+            //if (channelInfo == null) throw new Exception($"{ ConfigurationManager.AppSettings["ResearchAgentChannelName"]} doesn't exist in {context.Activity.GetChannelData<TeamsChannelData>().Team.Name} Team");
 
             //Set the Last Dialog in Conversation Data
             context.UserData.SetValue(Strings.LastDialogKey, Strings.LastDialogGameDialog);
@@ -87,15 +99,36 @@ namespace Microsoft.Teams.TemplateBotCSharp.Dialogs
                 context.ConversationData.SetValue("deadline", deadline);
 
                 var description = context.ConversationData.GetValue<string>("description");
-               
-                var text = $"Thank you! I'll have {description} done by {deadline}. " +
-                           $"Please reference {GetRandomNumber()} ticket number for this task in future.";
 
-                await context.PostAsync(text);
+                var fakeVsoTicketNumber = GetRandomNumber();
+
+                var connectorClient = new ConnectorClient(new Uri(context.Activity.ServiceUrl));
+
+                var channelInfo = GetChannelId(connectorClient, context, ConfigurationManager.AppSettings["ResearchAgentChannelName"]);
+                var message = $"<h2>New research request from {context.Activity.From.Name}</h2>" +
+                              $"<b>Who</b> {context.Activity.From.Name}<br/>" +
+                              $"<b>What</b> {description}<br/>" +
+                              $"<b>When</b> {deadline}<br/>" +
+                              $"<b>VSO Ticket</b> {fakeVsoTicketNumber}";
+                var conversationResourceResponse = await CreateChannelConversation(channelInfo,
+                    message,
+                    $"New research request from {context.Activity.Recipient.Name}",
+                    connectorClient);
+
+                await context.PostAsync("Thank you! I have posted following to internal agents. " +
+                                        "I will be in touch with you shortly. " +
+                                        $"Please reference VSO:{fakeVsoTicketNumber}/" +
+                                        $"TeamsActivityId:{conversationResourceResponse.ActivityId} for this research request in future. <br/>" +
+                                        message);
             }
             catch (TooManyAttemptsException)
             {
-                await context.PostAsync("Restarting now...");
+                await context.PostAsync("TooManyAttemptsException. Restarting now...");
+            }
+            catch (Exception e)
+            {
+                Trace.TraceError(e.Message);
+                throw;
             }
             finally
             {
@@ -103,11 +136,49 @@ namespace Microsoft.Teams.TemplateBotCSharp.Dialogs
             }
         }
 
+        private static ChannelInfo GetChannelId(ConnectorClient connectorClient, IDialogContext context, string channelName)
+        {
+            return new ChannelInfo("19:c20b196747424d8db51f6c00a8a9efa8@thread.skype", "Research Agents");
+
+            //var teamInfo = context.Activity.GetChannelData<TeamsChannelData>().Team;
+            //ConversationList channels = connectorClient.GetTeamsConnectorClient().Teams.FetchChannelList(teamInfo.Id);
+            //var channelInfo = channels.Conversations.FirstOrDefault(c => c.Name.Equals(channelName));
+            //if (channelInfo == null) throw new Exception($"{channelName} doesn't exist in {context.Activity.GetChannelData<TeamsChannelData>().Team.Name} Team");
+            //return channelInfo;
+        }
+
         private static string GetCurrentCultureCode()
         {
             // Use English as default culture since the this sample bot that does not include any localization resources
             // Thread.CurrentThread.CurrentUICulture.IetfLanguageTag.ToLower() can be used to obtain the user's preferred culture
             return "en-us";
+        }
+
+        private async Task<ConversationResourceResponse> CreateChannelConversation(ChannelInfo targetChannelInfo,
+            string message,
+            string topicName,
+            ConnectorClient connector)
+        {
+            try
+            {
+                var channelData = new TeamsChannelData { Channel = targetChannelInfo };
+                IMessageActivity newMessage = Activity.CreateMessageActivity();
+                newMessage.Type = ActivityTypes.Message;
+                newMessage.Text = message;
+                ConversationParameters conversationParams = new ConversationParameters(
+                    isGroup: true,
+                    bot: null,
+                    members: null,
+                    topicName: topicName,
+                    activity: (Activity)newMessage,
+                    channelData: channelData);
+                return await connector.Conversations.CreateConversationAsync(conversationParams);
+            }
+            catch (Exception e)
+            {
+                Trace.TraceError(e.Message);
+                throw;
+            }
         }
     }
 }
